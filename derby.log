@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Jun 07 14:41:58 NZST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0188-93bb-8041-00000e5784c8 
+on database directory C:\Users\GGPC\OneDrive - AUT University\AUT\Year Two\Semester 1\COMP603\Assignment 2\PDC_Project_2\HotelDB with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/C:/Users/GGPC/OneDrive%20-%20AUT%20University/AUT/Year%20Two/Semester%201/COMP603/Assignment%202/PDC_Project_2/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_371-b11
+user.dir=C:\Users\GGPC\OneDrive - AUT University\AUT\Year Two\Semester 1\COMP603\Assignment 2\PDC_Project_2
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
