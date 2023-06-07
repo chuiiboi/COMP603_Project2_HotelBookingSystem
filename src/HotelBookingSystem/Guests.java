@@ -8,6 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,13 +26,20 @@ import java.util.logging.Logger;
 public class Guests {
 
     private ArrayList<Guest> guestList;
-    private final String guestsFilePath; // The HBS_guests.txt file holds the data of each Guest Object in the ArrayList so it can be saved between different runs of the program.
+
+//    private final String guestsFilePath; // The HBS_guests.txt file holds the data of each Guest Object in the ArrayList so it can be saved between different runs of the program.
+    private final DBManager dbManager;
+    private final Connection conn;
+    private Statement statement;
 
     // Class that holds most controls for the Guest ArrayList:
-    public Guests(String guestsFilePath) {
+    public Guests() {
         this.guestList = new ArrayList<>();
-        this.guestsFilePath = guestsFilePath;
-        this.readGuestsFromFile(this.guestsFilePath);
+        dbManager = new DBManager();
+        conn = dbManager.getConnection();
+        this.initializeGuestsTable(); // Creates GUESTS table in HotelDB if not already created
+        this.getGuestsFromDB();
+
     }
 
     // Getter:
@@ -35,11 +47,11 @@ public class Guests {
         return guestList;
     }
 
-    // Adds a new Guest object to the ArrayList then updates HBS_guests.txt file:
+    // Adds a new Guest object to the ArrayList then updates guests DB table:
     // Returns added Guest object;
     public Guest add(Guest guest) {
         guestList.add(guest);
-        updateGuestsFile();
+        this.dbManager.updateDB("INSERT INTO GUESTS VALUES ('" + guest.getFullName() + "', '" + guest.getEmail() + "', '" + guest.getPhoneNo() + "')");
         return guest;
     }
 
@@ -49,7 +61,7 @@ public class Guests {
             System.out.println("Guest does not exist.");
         } else {
             guestList.remove(guest);
-            updateGuestsFile();
+            dbManager.updateDB("DELETE FROM GUESTS WHERE EMAIL='" + guest.getEmail() + "'");
             System.out.println("Guest " + guest.getFullName() + " has been removed.");
         }
     }
@@ -102,60 +114,45 @@ public class Guests {
         }
     }
 
-    // For emptying HBS_guests.txt file so it can be updated/rewritten:
-    public void emptyFile() {
+    public void getGuestsFromDB() {
+        Guest newGuest;
+        ResultSet rs = this.dbManager.queryDB("SELECT * FROM GUESTS");
         try {
-            FileWriter fw = new FileWriter(guestsFilePath);
-            fw.write("");
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred while emptying the file: " + e.getMessage());
-        }
-    }
-
-    // Update the HBS_guests.txt file - called each time a new guest is added or removed:
-    // writes each object to the file.
-    public void updateGuestsFile() {
-        this.emptyFile();
-        try {
-            FileOutputStream fileOut = new FileOutputStream(guestsFilePath);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            for (Guest g : guestList) {
-                objectOut.writeObject(g);
+            while (rs.next()) {
+                newGuest = new Guest(rs.getString(1), rs.getString(2), rs.getString(3));
+                add(newGuest);
             }
-            objectOut.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
-    //Read all guests from HBS_guests.txt file - called at start of program
-    public void readGuestsFromFile(String filepath) {
+    public void initializeGuestsTable() {
+        if (!this.checkGuestsTableExists("GUESTS")) {
+            this.dbManager.updateDB("CREATE  TABLE GUESTS  (NAME  VARCHAR(50),   EMAIL   VARCHAR(50),   PHONENO   VARCHAR(12))");
+        }
+
+    }
+
+    public boolean checkGuestsTableExists(String tableName) {
         try {
-            FileInputStream fileIn = new FileInputStream(filepath);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-
-            while (true) { // Loop stops when end of file is reached.
-                Object obj = null;
-                try {
-                    obj = objectIn.readObject(); // reads Guest object from file.
-                } catch (ClassNotFoundException e) {
-                    Logger.getLogger(HotelBookingSystem.class.getName()).log(Level.SEVERE, null, e);
-                    System.out.println(e.getMessage());
-                } catch (EOFException e) {
-                    break; // Breaks loop when end of file is reached.
-                }
-                guestList.add((Guest) obj); // add Guest object to Arraylist.
-            }
-
-            objectIn.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            //System.out.println("IOException Error (in guests.java)."); // Can appear if HBS_guests file is completely empty when starting program so this is commented out (code still works).
+            DatabaseMetaData dbmd = this.conn.getMetaData();
+            ResultSet rs = dbmd.getTables(null, null, tableName, null);
+            return rs.next();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return false;
         }
     }
+
+    public void closeConnection() {
+        this.dbManager.closeConnections();
+    }
+
+//    public static void main(String[] args) {
+//
+//        Guests g = new Guests();
+//        g.closeConnection();
+//        g.displayGuests();
+//    }
 }

@@ -16,7 +16,7 @@ public class HotelBookingSystem {
     ;
 
     public HotelBookingSystem() {
-        this.guests = new Guests("./resources/HBS_guests.txt");
+        this.guests = new Guests();
         this.rooms = new Rooms("./resources/HBS_rooms.txt");
         this.bookings = new Bookings("./resources/HBS_bookings.txt");
     }
@@ -53,7 +53,7 @@ public class HotelBookingSystem {
                         System.out.println("End Of Program. All data has been saved into respective files within resources folder.");
                         hbs.bookings.updateBookingsFile();
                         hbs.rooms.updateRoomsFile();
-                        hbs.guests.updateGuestsFile();
+                        //hbs.guests.updateGuestsFile();
                         System.exit(0);
                     default:// Assumes user made wrong input, notifies them, redisplays options.
                         System.out.println("Invalid input. Enter a number from 1 to 4.");
@@ -203,9 +203,9 @@ public class HotelBookingSystem {
     // calls selectGUest() from Guests class to allow user to select which guest to remove.
     // calls remove() from Guests class to remove the chosen guest.
     public void removeGuest() {
-        Guest tempGuest = guests.selectGuest();
-        if (tempGuest != null) {
-            guests.remove(tempGuest);
+        Guest guest = guests.selectGuest();
+        if (guest != null) {
+            guests.remove(guest);
         }
     }
 
