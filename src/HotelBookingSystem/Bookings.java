@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,13 +23,18 @@ import java.util.logging.Logger;
 public class Bookings {
 
     private ArrayList<Booking> bookingList;
-    private final String bookingsFilePath; // The HBS_bookings.txt file holds the data of each Booking Object in the ArrayList so it can be saved between different runs of the program.
+    public Guests guests;
+    public Rooms rooms;
+    private final DBManager dbManager;
 
     // Class that holds most controls for the Booking ArrayList:
-    public Bookings(String bookingsFilePath) {
+    public Bookings(Guests guests, Rooms rooms) {
         this.bookingList = new ArrayList<>();
-        this.bookingsFilePath = bookingsFilePath;
-        this.readBookingsFromFile(this.bookingsFilePath);
+        this.guests = guests;
+        this.rooms = rooms;
+        dbManager = new DBManager();
+        this.initializeBookingsTable(); // Creates BOOKINGS table in HotelDB if not already created
+        this.getBookingsFromDB();
     }
 
     // Getter:
@@ -35,13 +42,11 @@ public class Bookings {
         return bookingList;
     }
 
-    // Adds a new Booking object to the ArrayList then updates HBS_bookings.txt file:
+    // Adds a new Booking object to the ArrayList then updates DB table:
     // Returns added Guest object;
     public Booking add(Booking booking) {
-        //booking.getRoom().changeAvailability();
         bookingList.add(booking);
-        updateBookingsFile();
-//        System.out.println("booking added from bookingmgr"); //Testing
+        dbManager.updateDB("INSERT INTO BOOKINGS VALUES ('" + booking.getGuest().getFullName() + "', " + booking.getRoom().getRoomNum() + ", " + booking.getDays() + ")");
         return booking;
     }
 
@@ -51,7 +56,7 @@ public class Bookings {
             System.out.println("Booking does not exist.");
         } else {
             bookingList.remove(booking);
-            updateBookingsFile();
+            dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
             System.out.println("Booking has been removed.");
         }
     }
@@ -104,61 +109,35 @@ public class Bookings {
         }
     }
 
-    // For emptying HBS_bookings.txt file so it can be updated/rewritten:
-    public void emptyFile() {
+        public void getBookingsFromDB() {
+        Booking booking;
+        Guest guest = null;
+        Room room = null;
+        ResultSet rs = this.dbManager.queryDB("SELECT * FROM BOOKINGS");
         try {
-            FileWriter fw = new FileWriter(bookingsFilePath);
-            fw.write("");
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred while emptying the file: " + e.getMessage());
-        }
-    }
-
-    // Update the HBS_bookings.txt file - called each time a new guest is added or removed:
-    // writes each object to the file.
-    public void updateBookingsFile() {
-        this.emptyFile();
-        try {
-            FileOutputStream fileOut = new FileOutputStream(bookingsFilePath);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            for (Booking b : bookingList) {
-                objectOut.writeObject(b);
-            }
-            objectOut.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    } 
-
-    //Read all bookings from HBS_bookings.txt file - called at start of program
-    public void readBookingsFromFile(String filepath) {
-        boolean cont = true;
-        try {
-            FileInputStream fileIn = new FileInputStream(filepath);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-
-            while (cont) { // Loop stops when end of file is reached.
-                Object obj = null;
-                try {
-                    obj = objectIn.readObject(); // reads Booking object from file.
-                } catch (ClassNotFoundException e) {
-                    Logger.getLogger(HotelBookingSystem.class.getName()).log(Level.SEVERE, null, e);
-                    System.out.println(e.getMessage());
-                } catch (EOFException e) {
-                    break; // Breaks loop when end of file is reached.
+            while (rs.next()) {
+                for(Guest g : guests.getGuestList()) { //Find Guest reference to correct guest
+                    if(g.getFullName().equals(rs.getString(1))) {
+                        guest = g;
+                    }
                 }
-                bookingList.add((Booking) obj); // add Booking object to Arraylist.
+                room = rooms.getRoomMap().get(rs.getInt(2)); // Find Room reference to correct room
+                booking = new Booking(guest, room, rs.getInt(3));
+                bookingList.add(booking);
             }
-
-            objectIn.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-//            System.out.println("IOException Error (in bookings.java)."); // Can appear if HBS_bookings file is completely empty when starting program so this is commented out (code still works).
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
     }
+
+    public void initializeBookingsTable() {
+        if (!this.dbManager.checkTableExists("BOOKINGS")) {
+            this.dbManager.updateDB("CREATE  TABLE BOOKINGS  (GUESTNAME  VARCHAR(50),   ROOMNUM   INTEGER,   DAYS   INTEGER)");
+        }
+    }
+
+    public void closeConnection() {
+        this.dbManager.closeConnections();
+    }
+    
 }

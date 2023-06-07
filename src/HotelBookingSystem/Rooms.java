@@ -1,18 +1,10 @@
 package HotelBookingSystem;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,35 +13,37 @@ import java.util.logging.Logger;
 public class Rooms {
 
     private HashMap<Integer, Room> roomMap;
-    private final String roomsFilePath;  // The HBS_rooms.txt file holds the data of each Room Object in the HashMap so it can be saved between different runs of the program.
+
+    private final DBManager dbManager;
 
     // Class that holds most controls for the Room HaskMap:
-    public Rooms(String roomsFilePath) {
+    public Rooms() {
         this.roomMap = new HashMap<>();
-        this.roomsFilePath = roomsFilePath;
-        this.readRoomsFromFile(this.roomsFilePath);
+        dbManager = new DBManager();
+        this.initializeRoomsTable(); // Creates ROOMS table in HotelDB if not already created
+        this.getRoomsFromDB();
     }
 
     // Getter:
     public HashMap<Integer, Room> getRoomMap() {
-        return this.roomMap;
+        return roomMap;
     }
 
-    // Adds a new Room object to the HashMap then updates HBS_rooms.txt file:
+    // Adds a new Room object to the HashMap then updates DB table:
     // Returns added Room object;
     public Room add(Room room) {
-        this.roomMap.put(room.getRoomNum(), room);
-        this.updateRoomsFile();
+        roomMap.put(room.getRoomNum(), room);
+        dbManager.updateDB("INSERT INTO ROOMS VALUES (" + room.getRoomNum() + ", " + room.isAvailable() + ", '" + room.getTypeName() + "')");
         return room;
     }
 
     // Removes a specified Room object from the HashMap:
     public void remove(Room room) {
-        if (!this.roomMap.containsKey(room.getRoomNum())) {
+        if (!roomMap.containsKey(room.getRoomNum())) {
             System.out.println("Room does not exist.");
         } else {
-            this.roomMap.remove(room.getRoomNum());
-            this.updateRoomsFile();
+            roomMap.remove(room.getRoomNum());
+            dbManager.updateDB("DELETE FROM ROOMS WHERE ROOMNUM=" + room.getRoomNum());
             System.out.println("Room " + room.getRoomNum() + " has been removed.");
 
         }
@@ -101,63 +95,38 @@ public class Rooms {
             System.out.println("  " + r.toString());
         }
     }
-
-    // For emptying HBS_rooms.txt file so it can be updated/rewritten 
-    public void emptyFile() {
-        try {
-            FileWriter fw = new FileWriter(this.roomsFilePath);
-            fw.write("");
-            fw.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred while emptying the file: " + e.getMessage());
-        }
+    
+    public void updateAvailability(Room room, boolean available) {
+        room.changeAvailability(available);
+        dbManager.updateDB("UPDATE ROOMS SET AVAILABLE = " + available + " WHERE ROOMNUM = " + room.getRoomNum());
     }
 
-    // Update the HBS_roooms.txt file - called each time a new room is added or removed:
-    // writes each object to the file.
-    public void updateRoomsFile() {
-        this.emptyFile();
+    public void getRoomsFromDB() {
+        Room room;
+        ResultSet rs = this.dbManager.queryDB("SELECT * FROM ROOMS");
         try {
-            FileOutputStream fileOut = new FileOutputStream(this.roomsFilePath);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            for (Room r : roomMap.values()) {
-                objectOut.writeObject(r);
-            }
-            objectOut.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    //Read all rooms from HBS_rooms.txt file - called at start of program
-    public void readRoomsFromFile(String filepath) {
-        boolean cont = true;
-        try {
-            FileInputStream fileIn = new FileInputStream(filepath);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-
-            while (cont) { // Loop stops when end of file is reached.
-                Object obj = null;
-                try {
-                    obj = objectIn.readObject(); // reads Room object from file.
-                } catch (ClassNotFoundException e) {
-                    Logger.getLogger(HotelBookingSystem.class.getName()).log(Level.SEVERE, null, e);
-                    System.out.println(e.getMessage() + "1");
-                } catch (EOFException e) {
-                    break; // Breaks loop when end of file is reached.
+            while (rs.next()) {
+                if (rs.getString(3).equalsIgnoreCase("deluxe")) {
+                    room = new RoomDeluxe(rs.getInt(1));
+                } else {
+                    room = new RoomStandard(rs.getInt(1));
                 }
-                roomMap.put(((Room) obj).getRoomNum(), (Room) obj);  // add Room object to HashMap using roomNum as mapKey.
+                room.changeAvailability(rs.getBoolean(2));
+                roomMap.put(room.getRoomNum(), room);
             }
-
-            objectIn.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (IOException e) {
-//            System.out.println("IOException Error (in rooms.java.)."); // Can appear if HBS_rooms file is completely empty when starting program so this is commented out (code still works).
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
+    }
+
+    public void initializeRoomsTable() {
+        if (!this.dbManager.checkTableExists("ROOMS")) {
+            this.dbManager.updateDB("CREATE  TABLE ROOMS  (ROOMNUM  INTEGER, AVAILABLE CHAR(6), TYPE   VARCHAR(30))");
+        }
+    }
+
+    public void closeConnection() {
+        this.dbManager.closeConnections();
     }
 
 }

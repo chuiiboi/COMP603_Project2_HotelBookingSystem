@@ -1,6 +1,7 @@
 package HotelBookingSystem;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,12 +21,13 @@ public class DBManager {
 
     public DBManager() {
         establishConnection();
+
     }
 
-    public static void main(String[] args) {
-        DBManager dbManager = new DBManager();
-        System.out.println(dbManager.getConnection());
-    }
+//    public static void main(String[] args) {
+//        DBManager dbManager = new DBManager();
+//        System.out.println(dbManager.getConnection());
+//    }
 
     public Connection getConnection() {
         return this.conn;
@@ -36,7 +38,7 @@ public class DBManager {
         if (this.conn == null) {
             try {
                 conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-                System.out.println(URL + " Get Connected Successfully ....");
+                //System.out.println(URL + " Get Connected Successfully ...."); // For DB connection testing.
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -81,6 +83,17 @@ public class DBManager {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        }
+    }
+    
+      public boolean checkTableExists(String tableName) {
+        try {
+            DatabaseMetaData dbmd = this.conn.getMetaData();
+            ResultSet rs = dbmd.getTables(null, null, tableName, null);
+            return rs.next();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return false;
         }
     }
 }

@@ -1,23 +1,12 @@
 package HotelBookingSystem;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -27,16 +16,12 @@ public class Guests {
 
     private ArrayList<Guest> guestList;
 
-//    private final String guestsFilePath; // The HBS_guests.txt file holds the data of each Guest Object in the ArrayList so it can be saved between different runs of the program.
     private final DBManager dbManager;
-    private final Connection conn;
-    private Statement statement;
 
     // Class that holds most controls for the Guest ArrayList:
     public Guests() {
         this.guestList = new ArrayList<>();
         dbManager = new DBManager();
-        conn = dbManager.getConnection();
         this.initializeGuestsTable(); // Creates GUESTS table in HotelDB if not already created
         this.getGuestsFromDB();
 
@@ -51,7 +36,7 @@ public class Guests {
     // Returns added Guest object;
     public Guest add(Guest guest) {
         guestList.add(guest);
-        this.dbManager.updateDB("INSERT INTO GUESTS VALUES ('" + guest.getFullName() + "', '" + guest.getEmail() + "', '" + guest.getPhoneNo() + "')");
+        dbManager.updateDB("INSERT INTO GUESTS VALUES ('" + guest.getFullName() + "', '" + guest.getEmail() + "', '" + guest.getPhoneNo() + "')");
         return guest;
     }
 
@@ -61,7 +46,7 @@ public class Guests {
             System.out.println("Guest does not exist.");
         } else {
             guestList.remove(guest);
-            dbManager.updateDB("DELETE FROM GUESTS WHERE EMAIL='" + guest.getEmail() + "'");
+            dbManager.updateDB("DELETE FROM GUESTS WHERE NAME='" + guest.getFullName() + "'");
             System.out.println("Guest " + guest.getFullName() + " has been removed.");
         }
     }
@@ -115,12 +100,12 @@ public class Guests {
     }
 
     public void getGuestsFromDB() {
-        Guest newGuest;
+        Guest guest;
         ResultSet rs = this.dbManager.queryDB("SELECT * FROM GUESTS");
         try {
             while (rs.next()) {
-                newGuest = new Guest(rs.getString(1), rs.getString(2), rs.getString(3));
-                add(newGuest);
+                guest = new Guest(rs.getString(1), rs.getString(2), rs.getString(3));
+                guestList.add(guest);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -128,20 +113,8 @@ public class Guests {
     }
 
     public void initializeGuestsTable() {
-        if (!this.checkGuestsTableExists("GUESTS")) {
+        if (!this.dbManager.checkTableExists("GUESTS")) {
             this.dbManager.updateDB("CREATE  TABLE GUESTS  (NAME  VARCHAR(50),   EMAIL   VARCHAR(50),   PHONENO   VARCHAR(12))");
-        }
-
-    }
-
-    public boolean checkGuestsTableExists(String tableName) {
-        try {
-            DatabaseMetaData dbmd = this.conn.getMetaData();
-            ResultSet rs = dbmd.getTables(null, null, tableName, null);
-            return rs.next();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return false;
         }
     }
 
@@ -149,10 +122,4 @@ public class Guests {
         this.dbManager.closeConnections();
     }
 
-//    public static void main(String[] args) {
-//
-//        Guests g = new Guests();
-//        g.closeConnection();
-//        g.displayGuests();
-//    }
 }

@@ -17,8 +17,8 @@ public class HotelBookingSystem {
 
     public HotelBookingSystem() {
         this.guests = new Guests();
-        this.rooms = new Rooms("./resources/HBS_rooms.txt");
-        this.bookings = new Bookings("./resources/HBS_bookings.txt");
+        this.rooms = new Rooms();
+        this.bookings = new Bookings(guests, rooms);
     }
 
     public static void main(String[] args) {
@@ -49,11 +49,8 @@ public class HotelBookingSystem {
                     case 3: // Opens the booking menu.
                         hbs.bookingMenu();  
                         break;
-                    case 4: // Updates all data to files, ends program.
-                        System.out.println("End Of Program. All data has been saved into respective files within resources folder.");
-                        hbs.bookings.updateBookingsFile();
-                        hbs.rooms.updateRoomsFile();
-                        //hbs.guests.updateGuestsFile();
+                    case 4: // Ends program.
+                        
                         System.exit(0);
                     default:// Assumes user made wrong input, notifies them, redisplays options.
                         System.out.println("Invalid input. Enter a number from 1 to 4.");
@@ -195,8 +192,12 @@ public class HotelBookingSystem {
         String phoneNo = scanG.nextLine();
 
         Guest newGuest = new Guest(fullName, email, phoneNo);
-        guests.add(newGuest);
-        System.out.println("Guest " + newGuest.getFullName() + " has been added.");
+        if(!guests.getGuestList().contains(newGuest)) {
+            guests.add(newGuest);
+            System.out.println("Guest " + newGuest.getFullName() + " has been added.");
+        } else {
+            System.out.println("Guest " + newGuest.getFullName() + " already exists.");
+        }
     }
 
     // removes a Guest from the guest list:
@@ -257,17 +258,21 @@ public class HotelBookingSystem {
         } else {
             newRoom = new RoomDeluxe(roomNum);
         }
-        rooms.add(newRoom);
-        System.out.println("Room " + newRoom.getRoomNum() + " has been added.");
+        if(!rooms.getRoomMap().containsValue(newRoom)) {
+            rooms.add(newRoom);
+            System.out.println("Room " + newRoom.getRoomNum() + " has been added.");
+        } else {
+            System.out.println("Room " + newRoom.getRoomNum() + " already exists.");
+        }
     }
 
     // removes a Room from the rooms map:
     // calls selectRoom() from Rooms class to allow user to select which room to remove.
     // calls remove() from Rooms class to remove the chosen room.
     public void removeRoom() {
-        Room tempRoom = rooms.selectRoom();
-        if (tempRoom != null) {
-            rooms.remove(tempRoom);
+        Room room = rooms.selectRoom();
+        if (room != null) {
+            rooms.remove(room);
         }
     }
 
@@ -323,10 +328,13 @@ public class HotelBookingSystem {
 
         Booking newBooking = new Booking(guest, room, days);
 
-        bookings.add(newBooking);
-        rooms.getRoomMap().get(room.getRoomNum()).changeAvailability(false);
-        rooms.updateRoomsFile();
-        System.out.println("Booking has been added.");
+        if(!bookings.getBookingList().contains(newBooking)) {
+            bookings.add(newBooking);
+            rooms.updateAvailability(newBooking.getRoom(), false);
+            System.out.println("Booking has been added.");
+        } else {
+            System.out.println("Booking already exists.");
+        }
     }
 
     // removes a Booking from the bookings list:
@@ -334,11 +342,10 @@ public class HotelBookingSystem {
     // calls remove() from Bookings class to remove the chosen booking.
     // updates the availability of the booked room to true and saves to HBS_rooms.txt file.
     public void cancelBooking() {
-        Booking tempBooking = bookings.selectBooking();
-        if (tempBooking != null) {
-            bookings.remove(tempBooking);
-            tempBooking.getRoom().changeAvailability(true);
-            rooms.updateRoomsFile();
+        Booking booking = bookings.selectBooking();
+        if (booking != null) {
+            bookings.remove(booking);
+            rooms.updateAvailability(booking.getRoom(), true);
         }
     }
     
