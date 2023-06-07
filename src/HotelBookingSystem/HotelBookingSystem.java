@@ -1,5 +1,3 @@
-// gittest
-
 package HotelBookingSystem;
 
 import java.util.InputMismatchException;
