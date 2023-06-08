@@ -37,8 +37,8 @@ public abstract class Room implements Serializable {
     }
 
     // Changes availability status.
-    public void changeAvailability(boolean availability) {
-        this.available = availability;
+    public void changeAvailability(boolean available) {
+        this.available = available;
     }
 
     // Getter:
