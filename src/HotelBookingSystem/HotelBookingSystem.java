@@ -12,13 +12,15 @@ public class HotelBookingSystem {
     public Guests guests;
     public Rooms rooms;
     public Bookings bookings;
+    private final DBManager dbManager;
 
     ;
 
     public HotelBookingSystem() {
-        this.guests = new Guests();
-        this.rooms = new Rooms();
-        this.bookings = new Bookings(guests, rooms);
+        this.dbManager = new DBManager();
+        this.guests = new Guests(dbManager);
+        this.rooms = new Rooms(dbManager);
+        this.bookings = new Bookings(dbManager, guests, rooms);
     }
 
     public static void main(String[] args) {
@@ -352,5 +354,11 @@ public class HotelBookingSystem {
     // calls displayBookings() from bookings class which displays all bookings to the user.
     public void viewBookings() {
         bookings.displayBookings();
+    }
+    
+    
+    
+    public void closeConnection() {
+        this.dbManager.closeConnections();
     }
 }

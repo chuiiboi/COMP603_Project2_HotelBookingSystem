@@ -18,11 +18,11 @@ public class Bookings {
     private final DBManager dbManager;
 
     // Class that holds most controls for the Booking ArrayList:
-    public Bookings(Guests guests, Rooms rooms) {
+    public Bookings(DBManager dbManager, Guests guests, Rooms rooms) {
         this.bookingList = new ArrayList<>();
         this.guests = guests;
         this.rooms = rooms;
-        dbManager = new DBManager();
+        this.dbManager = dbManager;
         this.initializeBookingsTable(); // Creates BOOKINGS table in HotelDB if not already created
         this.getBookingsFromDB();
     }
@@ -124,10 +124,6 @@ public class Bookings {
         if (!this.dbManager.checkTableExists("BOOKINGS")) {
             this.dbManager.updateDB("CREATE  TABLE BOOKINGS  (GUESTNAME  VARCHAR(50),   ROOMNUM   INTEGER,   DAYS   INTEGER)");
         }
-    }
-
-    public void closeConnection() {
-        this.dbManager.closeConnections();
     }
     
 }

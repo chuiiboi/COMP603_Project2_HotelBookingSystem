@@ -19,9 +19,9 @@ public class Guests {
     private final DBManager dbManager;
 
     // Class that holds most controls for the Guest ArrayList:
-    public Guests() {
+    public Guests(DBManager dbManager) {
         this.guestList = new ArrayList<>();
-        dbManager = new DBManager();
+        this.dbManager = dbManager;
         this.initializeGuestsTable(); // Creates GUESTS table in HotelDB if not already created
         this.getGuestsFromDB();
 
@@ -116,10 +116,6 @@ public class Guests {
         if (!this.dbManager.checkTableExists("GUESTS")) {
             this.dbManager.updateDB("CREATE  TABLE GUESTS  (NAME  VARCHAR(50),   EMAIL   VARCHAR(50),   PHONENO   VARCHAR(12))");
         }
-    }
-
-    public void closeConnection() {
-        this.dbManager.closeConnections();
     }
 
 }
