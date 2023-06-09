@@ -6,8 +6,10 @@
 package HotelBookingSystem;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -394,6 +396,68 @@ public class View extends javax.swing.JFrame implements Observer{
     public javax.swing.JLabel SelectMenuLabel;
     // End of variables declaration//GEN-END:variables
 
+    public void showMainMenu(){
+        RoomMenuPanel.setVisible(false);
+        GuestMenuPanel.setVisible(false);
+        BookingMenuPanel.setVisible(false);
+        MainMenuPanel.setVisible(true);
+    }
+    
+    public void closeWindow() {
+        setVisible(false);
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+    
+    public void showGuestMenu(){
+        MainMenuPanel.setVisible(false);
+        GuestMenuPanel.setVisible(true);
+    }
+    
+    public void showRoomMenu(){
+        MainMenuPanel.setVisible(false);
+        RoomMenuPanel.setVisible(true);
+    }
+    
+    public void showBookingMenu(){
+        MainMenuPanel.setVisible(false);
+        BookingMenuPanel.setVisible(true);
+    }
+    
+    public String getUserInputString(String question, String defInput) {
+        String result;
+        try {
+        result = JOptionPane.showInputDialog(null, question, defInput).trim();
+        } catch (NullPointerException ex) {
+            return null; // Return null if 'cancel' is clicked.
+        }
+        return result;
+    }
+    public Integer getUserInputInt(String question, String defInput) {
+        String strInput;
+        Integer result;
+        strInput = JOptionPane.showInputDialog(null, "Enter Room Number:", "0"); 
+        if(strInput == null) {
+            return null; // Return null if 'cancel' is clicked.
+        }
+        try {
+        result = Integer.valueOf(strInput);
+        } catch (NumberFormatException ex) {
+            showMessagePopUp("Invalid Input: Must be an Integer. Try again");
+            result = getUserInputInt(question, defInput); // prompt user again.
+            return result;
+        }
+        return result;
+    }
+    
+    public Object getUserSelection(String prompt, String title, Object[] options, String defInput) {
+        Object result;
+        result = JOptionPane.showInputDialog(null, prompt, title, JOptionPane.QUESTION_MESSAGE, null, options, defInput);
+        return result;
+    }
+    
+    public void showMessagePopUp(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
     
     @Override
     public void update(Observable obs, Object obj) {
