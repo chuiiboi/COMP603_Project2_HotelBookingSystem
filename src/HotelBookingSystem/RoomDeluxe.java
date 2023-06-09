@@ -1,12 +1,10 @@
 package HotelBookingSystem;
 
-import java.io.Serializable;
-
 /**
  *
  * @author 21145050
  */
-public class RoomDeluxe extends Room implements Serializable {
+public class RoomDeluxe extends Room {
 
     private final String typeName;
     private final int capacity;

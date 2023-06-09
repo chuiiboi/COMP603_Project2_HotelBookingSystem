@@ -1,12 +1,10 @@
 package HotelBookingSystem;
 
-import java.io.Serializable;
-
 /**
  *
  * @author 21145050
  */
-public class Booking implements Serializable {
+public class Booking {
 
     public Guest guest;
     public Room room;

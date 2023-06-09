@@ -3,8 +3,6 @@ package HotelBookingSystem;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 /**
  *
@@ -39,61 +37,8 @@ public class Rooms {
 
     // Removes a specified Room object from the HashMap:
     public void remove(Room room) {
-        if (!roomMap.containsKey(room.getRoomNum())) {
-            System.out.println("Room does not exist.");
-        } else {
-            roomMap.remove(room.getRoomNum());
-            dbManager.updateDB("DELETE FROM ROOMS WHERE ROOMNUM=" + room.getRoomNum());
-            System.out.println("Room " + room.getRoomNum() + " has been removed.");
-
-        }
-    }
-
-    // Allow user to select a Room object from the HashMap then return the selected Room object:
-    // uses displayRooms() to show the user options to choose from.
-    // reads the room number from the user and uses it to retrieve Object.
-    public Room selectRoom() {
-
-        if (roomMap.isEmpty()) {
-            System.out.println("There are no rooms to choose from.");
-        } else {
-            Scanner scan = new Scanner(System.in);
-            int selection;
-
-            System.out.println("Please Select a Room Number from the list (0 to cancel).");
-            displayRooms();
-            do {
-                try {
-                    selection = scan.nextInt();
-
-                    if (!(roomMap.containsKey((Integer) selection)) && selection != 0) {
-                        System.out.println("Room not found. Please enter a room number from the list.");
-                    } else if (selection == 0) {
-                        return null;
-                    } else {
-                        break;
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a room number from the list.");
-                    selection = -1;
-                }
-            } while (true);
-
-            return roomMap.get((Integer) selection);
-        }
-
-        return null;
-    }
-
-    // Display a list of all of the Room objects inside the HashMap:
-    public void displayRooms() {
-        System.out.println("Rooms:");
-        if (roomMap.isEmpty()) {
-            System.out.println("  There are no rooms");
-        }
-        for (Room r : roomMap.values()) {
-            System.out.println("  " + r.toString());
-        }
+        roomMap.remove(room.getRoomNum());
+        dbManager.updateDB("DELETE FROM ROOMS WHERE ROOMNUM=" + room.getRoomNum());
     }
     
     public void updateAvailability(Room room, boolean available) {

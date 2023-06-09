@@ -3,8 +3,6 @@ package HotelBookingSystem;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 /**
  *
@@ -42,62 +40,9 @@ public class Bookings {
 
     // Removes a specified Booking object from the ArrayList:
     public void remove(Booking booking) {
-        if (!bookingList.contains(booking)) {
-            System.out.println("Booking does not exist.");
-        } else {
-            bookingList.remove(booking);
-            rooms.updateAvailability(booking.getRoom(), true);
-            dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
-            System.out.println("Booking has been removed.");
-        }
-    }
-
-    // Allow user to select a Booking object from the ArrayList then return the selected Booking object:
-    // uses displayBookings() to show the user options to choose from.
-    public Booking selectBooking() {
-
-        if (bookingList.isEmpty()) {
-            System.out.println("There are no bookings to choose from");
-        } else {
-            Scanner scan = new Scanner(System.in);
-            int selection;
-
-            System.out.println("Please Select a Bookings (0 to cancel)");
-            this.displayBookings();
-            do {
-                try {
-                    selection = scan.nextInt();
-
-                    if (selection < 0 || selection > bookingList.size()) {
-                        System.out.println("Booking not found. Please enter a number from the list.");
-                    } else if (selection == 0) {
-                        return null;
-                    } else {
-                        break;
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number from the list.");
-                    selection = -1;
-                }
-            } while (selection < 0 || selection > bookingList.size());
-
-            return bookingList.get(selection - 1);
-        }
-
-        return null;
-    }
-
-    // Display a numbered list of all of the Booking objects inside the ArrayList:
-    public void displayBookings() {
-        System.out.println("Bookings:");
-        if (bookingList.isEmpty()) {
-            System.out.println("  There are no bookings.");
-        }
-        int i = 1;
-        for (Booking b : bookingList) {
-            System.out.println("  " + i + ". " + b.toString());
-            i++;
-        }
+        bookingList.remove(booking);
+        rooms.updateAvailability(booking.getRoom(), true);
+        dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
     }
 
     public void getBookingsFromDB() {

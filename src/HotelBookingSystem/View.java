@@ -36,6 +36,13 @@ public class View extends javax.swing.JFrame implements Observer{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        MainMenuPanel = new javax.swing.JPanel();
+        HotelBookingSystemLabel = new javax.swing.JLabel();
+        SelectMenuLabel = new javax.swing.JLabel();
+        RoomMenuButton = new javax.swing.JButton();
+        BookingMenuButton = new javax.swing.JButton();
+        GuestMenuButton = new javax.swing.JButton();
+        QuitButton = new javax.swing.JButton();
         RoomMenuPanel = new javax.swing.JPanel();
         RoomMenuLabel = new javax.swing.JLabel();
         MainMenuButtonR = new javax.swing.JButton();
@@ -52,13 +59,6 @@ public class View extends javax.swing.JFrame implements Observer{
         BookingsLabel = new javax.swing.JLabel();
         AddBookingButton = new javax.swing.JButton();
         RemoveBookingButton = new javax.swing.JButton();
-        MainMenuPanel = new javax.swing.JPanel();
-        HotelBookingSystemLabel = new javax.swing.JLabel();
-        SelectMenuLabel = new javax.swing.JLabel();
-        RoomMenuButton = new javax.swing.JButton();
-        BookingMenuButton = new javax.swing.JButton();
-        GuestMenuButton = new javax.swing.JButton();
-        QuitButton = new javax.swing.JButton();
         GuestMenuPanel = new javax.swing.JPanel();
         GuestMenuLabel = new javax.swing.JLabel();
         MainMenuButtonG = new javax.swing.JButton();
@@ -70,6 +70,68 @@ public class View extends javax.swing.JFrame implements Observer{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hotel Booking System");
+
+        MainMenuPanel.setMinimumSize(new java.awt.Dimension(330, 173));
+        MainMenuPanel.setPreferredSize(new java.awt.Dimension(330, 173));
+
+        HotelBookingSystemLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        HotelBookingSystemLabel.setText("Hotel Booking System");
+
+        SelectMenuLabel.setText("Select a menu to open:");
+
+        RoomMenuButton.setText("Rooms");
+
+        BookingMenuButton.setText("Bookings");
+        BookingMenuButton.setMinimumSize(new java.awt.Dimension(72, 22));
+
+        GuestMenuButton.setText("Guests");
+
+        QuitButton.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        QuitButton.setText("Quit");
+
+        javax.swing.GroupLayout MainMenuPanelLayout = new javax.swing.GroupLayout(MainMenuPanel);
+        MainMenuPanel.setLayout(MainMenuPanelLayout);
+        MainMenuPanelLayout.setHorizontalGroup(
+            MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainMenuPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainMenuPanelLayout.createSequentialGroup()
+                        .addComponent(SelectMenuLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(99, 99, 99))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainMenuPanelLayout.createSequentialGroup()
+                        .addComponent(HotelBookingSystemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63))))
+            .addGroup(MainMenuPanelLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(GuestMenuButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(MainMenuPanelLayout.createSequentialGroup()
+                        .addComponent(RoomMenuButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(BookingMenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(MainMenuPanelLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(QuitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        MainMenuPanelLayout.setVerticalGroup(
+            MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainMenuPanelLayout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(HotelBookingSystemLabel)
+                .addGap(18, 18, 18)
+                .addComponent(SelectMenuLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BookingMenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RoomMenuButton)
+                    .addComponent(GuestMenuButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(QuitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         RoomMenuPanel.setMaximumSize(new java.awt.Dimension(330, 173));
         RoomMenuPanel.setMinimumSize(new java.awt.Dimension(330, 173));
@@ -195,68 +257,6 @@ public class View extends javax.swing.JFrame implements Observer{
                         .addGap(5, 5, 5)
                         .addComponent(RemoveBookingButton))
                     .addComponent(BookingScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        MainMenuPanel.setMinimumSize(new java.awt.Dimension(330, 173));
-        MainMenuPanel.setPreferredSize(new java.awt.Dimension(330, 173));
-
-        HotelBookingSystemLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        HotelBookingSystemLabel.setText("Hotel Booking System");
-
-        SelectMenuLabel.setText("Select a menu to open:");
-
-        RoomMenuButton.setText("Rooms");
-
-        BookingMenuButton.setText("Bookings");
-        BookingMenuButton.setMinimumSize(new java.awt.Dimension(72, 22));
-
-        GuestMenuButton.setText("Guests");
-
-        QuitButton.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        QuitButton.setText("Quit");
-
-        javax.swing.GroupLayout MainMenuPanelLayout = new javax.swing.GroupLayout(MainMenuPanel);
-        MainMenuPanel.setLayout(MainMenuPanelLayout);
-        MainMenuPanelLayout.setHorizontalGroup(
-            MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainMenuPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainMenuPanelLayout.createSequentialGroup()
-                        .addComponent(SelectMenuLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainMenuPanelLayout.createSequentialGroup()
-                        .addComponent(HotelBookingSystemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63))))
-            .addGroup(MainMenuPanelLayout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(GuestMenuButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MainMenuPanelLayout.createSequentialGroup()
-                        .addComponent(RoomMenuButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BookingMenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MainMenuPanelLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(QuitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        MainMenuPanelLayout.setVerticalGroup(
-            MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainMenuPanelLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(HotelBookingSystemLabel)
-                .addGap(18, 18, 18)
-                .addComponent(SelectMenuLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(MainMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BookingMenuButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RoomMenuButton)
-                    .addComponent(GuestMenuButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(QuitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -394,6 +394,7 @@ public class View extends javax.swing.JFrame implements Observer{
     public javax.swing.JLabel SelectMenuLabel;
     // End of variables declaration//GEN-END:variables
 
+    
     @Override
     public void update(Observable obs, Object obj) {
         if(obj.getClass() == Guests.class) {
