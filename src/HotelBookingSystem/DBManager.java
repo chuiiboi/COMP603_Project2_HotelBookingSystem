@@ -25,7 +25,6 @@ public class DBManager {
 
     }
 
-    // Getter:
     public Connection getConnection() {
         return this.conn;
     }
@@ -46,6 +45,7 @@ public class DBManager {
         if (conn != null) {
             try {
                 conn.close();
+                System.out.println("Connection Closed");
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }

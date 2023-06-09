@@ -39,13 +39,8 @@ public class Guests {
 
     // Removes a specified Guest object from the ArrayList then updates DB GUESTS table:
     public void remove(Guest guest) {
-        if (!guestList.contains(guest)) {
-            System.out.println("Guest does not exist.");
-        } else {
-            guestList.remove(guest);
-            dbManager.updateDB("DELETE FROM GUESTS WHERE NAME='" + guest.getFullName() + "'");
-            System.out.println("Guest " + guest.getFullName() + " has been removed.");
-        }
+        guestList.remove(guest);
+        dbManager.updateDB("DELETE FROM GUESTS WHERE NAME='" + guest.getFullName() + "'");
     }
 
     // Gets Guest data from DB GUESTS table and inserts into a guestList that holds all guests:

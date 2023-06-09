@@ -37,14 +37,8 @@ public class Rooms {
 
     // Removes a specified Room object from the HashMap then updates DB ROOMS table:
     public void remove(Room room) {
-        if (!roomMap.containsKey(room.getRoomNum())) {
-            System.out.println("Room does not exist.");
-        } else {
-            roomMap.remove(room.getRoomNum());
-            dbManager.updateDB("DELETE FROM ROOMS WHERE ROOMNUM=" + room.getRoomNum());
-            System.out.println("Room " + room.getRoomNum() + " has been removed.");
-
-        }
+        roomMap.remove(room.getRoomNum());
+        dbManager.updateDB("DELETE FROM ROOMS WHERE ROOMNUM=" + room.getRoomNum());
     }
 
     // Updates the availability of input room and updates appropriate data in database:
