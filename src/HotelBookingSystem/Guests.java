@@ -19,9 +19,9 @@ public class Guests {
     private final DBManager dbManager;
 
     // Class that holds most controls for the Guest ArrayList:
-    public Guests() {
+    public Guests(DBManager dbManager) {
         this.guestList = new ArrayList<>();
-        dbManager = new DBManager();
+        this.dbManager = dbManager;
         this.initializeGuestsTable(); // Creates GUESTS table in HotelDB if not already created
         this.getGuestsFromDB();
 
@@ -118,8 +118,19 @@ public class Guests {
         }
     }
 
-    public void closeConnection() {
-        this.dbManager.closeConnections();
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (guestList.isEmpty()) {
+            sb.append("There are no guests.");
+        }
+        else {
+            for (Guest g : guestList) {
+                sb.append(g).append("\n");
+            }
+        }
+        
+        return sb.toString();
     }
-
+    
 }

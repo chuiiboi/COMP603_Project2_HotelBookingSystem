@@ -17,9 +17,9 @@ public class Rooms {
     private final DBManager dbManager;
 
     // Class that holds most controls for the Room HaskMap:
-    public Rooms() {
+    public Rooms(DBManager dbManager) {
         this.roomMap = new HashMap<>();
-        dbManager = new DBManager();
+        this.dbManager = dbManager;
         this.initializeRoomsTable(); // Creates ROOMS table in HotelDB if not already created
         this.getRoomsFromDB();
     }
@@ -124,9 +124,20 @@ public class Rooms {
             this.dbManager.updateDB("CREATE  TABLE ROOMS  (ROOMNUM  INTEGER, AVAILABLE CHAR(6), TYPE   VARCHAR(30))");
         }
     }
-
-    public void closeConnection() {
-        this.dbManager.closeConnections();
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (roomMap.isEmpty()) {
+            sb.append("There are no rooms.");
+        }
+        else {
+            for (Room r : roomMap.values()) {
+                sb.append(r).append("\n");
+            }
+        }
+        
+        return sb.toString();
     }
 
 }

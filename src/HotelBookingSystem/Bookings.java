@@ -18,11 +18,11 @@ public class Bookings {
     private final DBManager dbManager;
 
     // Class that holds most controls for the Booking ArrayList:
-    public Bookings(Guests guests, Rooms rooms) {
+    public Bookings(DBManager dbManager, Guests guests, Rooms rooms) {
         this.bookingList = new ArrayList<>();
         this.guests = guests;
         this.rooms = rooms;
-        dbManager = new DBManager();
+        this.dbManager = dbManager;
         this.initializeBookingsTable(); // Creates BOOKINGS table in HotelDB if not already created
         this.getBookingsFromDB();
     }
@@ -46,6 +46,7 @@ public class Bookings {
             System.out.println("Booking does not exist.");
         } else {
             bookingList.remove(booking);
+            rooms.updateAvailability(booking.getRoom(), true);
             dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
             System.out.println("Booking has been removed.");
         }
@@ -99,7 +100,7 @@ public class Bookings {
         }
     }
 
-        public void getBookingsFromDB() {
+    public void getBookingsFromDB() {
         Booking booking;
         Guest guest = null;
         Room room = null;
@@ -125,9 +126,20 @@ public class Bookings {
             this.dbManager.updateDB("CREATE  TABLE BOOKINGS  (GUESTNAME  VARCHAR(50),   ROOMNUM   INTEGER,   DAYS   INTEGER)");
         }
     }
-
-    public void closeConnection() {
-        this.dbManager.closeConnections();
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (bookingList.isEmpty()) {
+            sb.append("There are no bookings.");
+        }
+        else {
+            for (Booking b : bookingList) {
+                sb.append(b).append("\n");
+            }
+        }
+        
+        return sb.toString();
     }
     
 }

@@ -53,7 +53,7 @@ public abstract class Room implements Serializable {
     // Room toString:
     @Override
     public String toString() {
-        return "Room#" + roomNum + " (" + getTypeName() + ") is " + getAvailability() + ", $" + getCostPerNight() + " per night (max capacity: " + getCapacity() + ")";
+        return "#" + roomNum + " (" + getTypeName() + ") is " + getAvailability() + ", $" + getCostPerNight() + " per night (max capacity: " + getCapacity() + ")";
     }
 
 }
