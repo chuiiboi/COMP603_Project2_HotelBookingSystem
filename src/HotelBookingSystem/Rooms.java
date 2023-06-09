@@ -18,7 +18,7 @@ public class Rooms {
     public Rooms(DBManager dbManager) {
         this.roomMap = new HashMap<>();
         this.dbManager = dbManager;
-        this.initializeRoomsTable(); // Creates ROOMS table in HotelDB if not already created
+        this.initializeRoomsTable();
         this.getRoomsFromDB();
     }
 
@@ -27,7 +27,7 @@ public class Rooms {
         return roomMap;
     }
 
-    // Adds a new Room object to the HashMap then updates DB table:
+    // Adds a new Room object to the HashMap then updates DB ROOMS table:
     // Returns added Room object;
     public Room add(Room room) {
         roomMap.put(room.getRoomNum(), room);
@@ -35,7 +35,7 @@ public class Rooms {
         return room;
     }
 
-    // Removes a specified Room object from the HashMap:
+    // Removes a specified Room object from the HashMap then updates DB ROOMS table:
     public void remove(Room room) {
         if (!roomMap.containsKey(room.getRoomNum())) {
             System.out.println("Room does not exist.");
@@ -46,12 +46,14 @@ public class Rooms {
 
         }
     }
-    
+
+    // Updates the availability of input room and updates appropriate data in database:
     public void updateAvailability(Room room, boolean available) {
         room.changeAvailability(available);
         dbManager.updateDB("UPDATE ROOMS SET AVAILABLE = " + available + " WHERE ROOMNUM = " + room.getRoomNum());
     }
 
+    // Gets Room data from DB ROOMS table and inserts into a roomMap that holds all rooms:
     public void getRoomsFromDB() {
         Room room;
         ResultSet rs = this.dbManager.queryDB("SELECT * FROM ROOMS");
@@ -69,25 +71,24 @@ public class Rooms {
             System.out.println(ex.getMessage());
         }
     }
-
+    // Creates ROOMS table in HotelDB if not already created:
     public void initializeRoomsTable() {
         if (!this.dbManager.checkTableExists("ROOMS")) {
             this.dbManager.updateDB("CREATE  TABLE ROOMS  (ROOMNUM  INTEGER, AVAILABLE CHAR(6), TYPE   VARCHAR(30))");
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (roomMap.isEmpty()) {
             sb.append("There are no rooms.");
-        }
-        else {
+        } else {
             for (Room r : roomMap.values()) {
                 sb.append(r).append("\n");
             }
         }
-        
+
         return sb.toString();
     }
 
