@@ -21,7 +21,7 @@ public class Bookings {
         this.guests = guests;
         this.rooms = rooms;
         this.dbManager = dbManager;
-        this.initializeBookingsTable(); // Creates BOOKINGS table in HotelDB if not already created
+        this.initializeBookingsTable(); 
         this.getBookingsFromDB();
     }
 
@@ -30,7 +30,7 @@ public class Bookings {
         return bookingList;
     }
 
-    // Adds a new Booking object to the ArrayList then updates DB table:
+    // Adds a new Booking object to the ArrayList then updates DB BOOKINGS table:
     // Returns added Guest object;
     public Booking add(Booking booking) {
         bookingList.add(booking);
@@ -38,13 +38,14 @@ public class Bookings {
         return booking;
     }
 
-    // Removes a specified Booking object from the ArrayList:
+    // Removes a specified Booking object from the ArrayList then updates DB BOOKINGS table:
     public void remove(Booking booking) {
         bookingList.remove(booking);
         rooms.updateAvailability(booking.getRoom(), true);
         dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
     }
 
+    // Gets Bookings data from DB BOOKINGS table and inserts into a bookingList that holds all bookings:
     public void getBookingsFromDB() {
         Booking booking;
         Guest guest = null;
@@ -66,6 +67,7 @@ public class Bookings {
         }
     }
 
+    // Creates BOOKINGS table in HotelDB if not already created:
     public void initializeBookingsTable() {
         if (!this.dbManager.checkTableExists("BOOKINGS")) {
             this.dbManager.updateDB("CREATE  TABLE BOOKINGS  (GUESTNAME  VARCHAR(50),   ROOMNUM   INTEGER,   DAYS   INTEGER)");

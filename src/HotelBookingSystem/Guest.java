@@ -9,9 +9,9 @@ import java.io.Serializable;
 public class Guest implements Serializable {
     //default serialVersion i
 
-    private String fullName;
-    private String email;
-    private String phoneNo;
+    private final String fullName;
+    private final String email;
+    private final String phoneNo;
 
     // Class for an individual Guest object:
     public Guest(String fullname, String email, String phoneNo) {

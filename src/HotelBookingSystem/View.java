@@ -6,14 +6,16 @@
 package HotelBookingSystem;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author GGPC
+ * @author 21145050
  */
-public class View extends javax.swing.JFrame implements Observer{
+public class View extends javax.swing.JFrame implements Observer {
 
     /**
      * Creates new form View
@@ -21,7 +23,7 @@ public class View extends javax.swing.JFrame implements Observer{
     public View() {
         initComponents();
         this.setVisible(true);
-        this.MainMenuPanel.setVisible(true);
+        this.MainMenuPanel.setVisible(true); // Specifies the main menu as visible while other menus start invisable.
         this.BookingMenuPanel.setVisible(false);
         this.RoomMenuPanel.setVisible(false);
         this.GuestMenuPanel.setVisible(false);
@@ -394,18 +396,83 @@ public class View extends javax.swing.JFrame implements Observer{
     public javax.swing.JLabel SelectMenuLabel;
     // End of variables declaration//GEN-END:variables
 
-    
+    public void showMainMenu() {
+        RoomMenuPanel.setVisible(false);
+        GuestMenuPanel.setVisible(false);
+        BookingMenuPanel.setVisible(false);
+        MainMenuPanel.setVisible(true);
+    }
+
+    public void closeWindow() {
+        setVisible(false);
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+    public void showGuestMenu() {
+        MainMenuPanel.setVisible(false);
+        GuestMenuPanel.setVisible(true);
+    }
+
+    public void showRoomMenu() {
+        MainMenuPanel.setVisible(false);
+        RoomMenuPanel.setVisible(true);
+    }
+
+    public void showBookingMenu() {
+        MainMenuPanel.setVisible(false);
+        BookingMenuPanel.setVisible(true);
+    }
+
+    // Creates Pop-Up windows asking user to input a String:
+    public String getUserInputString(String question, String defInput) {
+        String result;
+        try {
+            result = JOptionPane.showInputDialog(null, question, defInput).trim();
+        } catch (NullPointerException ex) {
+            return null; // Return null if 'cancel' is clicked.
+        }
+        return result;
+    }
+
+    // Creates a Pop-Up window asking user to input an Integer (and validates input):
+    public Integer getUserInputInt(String question, String defInput) {
+        String strInput;
+        Integer result;
+        strInput = JOptionPane.showInputDialog(null, question, defInput);
+        if (strInput == null) {
+            return null; // Return null if 'cancel' is clicked.
+        }
+        try {
+            result = Integer.valueOf(strInput);
+        } catch (NumberFormatException ex) {
+            showMessagePopUp("Invalid Input: Must be an Integer. Try again");
+            result = getUserInputInt(question, defInput); // prompt user again.
+            return result;
+        }
+        return result;
+    }
+
+    // Creates Pop-Up windows asking user to select an object from a list and returns to caller:
+    public Object getUserSelection(String prompt, String title, Object[] options, String defInput) {
+        Object result;
+        result = JOptionPane.showInputDialog(null, prompt, title, JOptionPane.QUESTION_MESSAGE, null, options, defInput);
+        return result;
+    }
+
+    // Creates a Pop-Up window displaying a message to user:
+    public void showMessagePopUp(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
     @Override
     public void update(Observable obs, Object obj) {
-        if(obj.getClass() == Guests.class) {
+        if (obj.getClass() == Guests.class) { //if obj is a Guests class, update textArea that displays the list of guests.
             Guests guests = (Guests) obj;
             this.GuestTextArea.setText(guests.toString());
-        }
-        else if(obj.getClass() == Rooms.class) {
+        } else if (obj.getClass() == Rooms.class) {//if obj is a Rooms class, update textArea that displays the list of rooms.
             Rooms rooms = (Rooms) obj;
             this.RoomTextArea.setText(rooms.toString());
-        }
-        else if(obj.getClass() == Bookings.class) {
+        } else if (obj.getClass() == Bookings.class) {//if obj is a Bookings class, update textArea that displays the list of bookings.
             Bookings bookings = (Bookings) obj;
             this.BookingTextArea.setText(bookings.toString());
         }

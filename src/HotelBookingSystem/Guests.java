@@ -19,7 +19,7 @@ public class Guests {
     public Guests(DBManager dbManager) {
         this.guestList = new ArrayList<>();
         this.dbManager = dbManager;
-        this.initializeGuestsTable(); // Creates GUESTS table in HotelDB if not already created
+        this.initializeGuestsTable();
         this.getGuestsFromDB();
 
     }
@@ -29,7 +29,7 @@ public class Guests {
         return guestList;
     }
 
-    // Adds a new Guest object to the ArrayList then updates guests DB table:
+    // Adds a new Guest object to the ArrayList then updates DB GUESTS table:
     // Returns added Guest object;
     public Guest add(Guest guest) {
         guestList.add(guest);
@@ -37,12 +37,13 @@ public class Guests {
         return guest;
     }
 
-    // Removes a specified Guest object from the ArrayList:
+    // Removes a specified Guest object from the ArrayList then updates DB GUESTS table:
     public void remove(Guest guest) {
         guestList.remove(guest);
         dbManager.updateDB("DELETE FROM GUESTS WHERE NAME='" + guest.getFullName() + "'");
     }
 
+    // Gets Guest data from DB GUESTS table and inserts into a guestList that holds all guests:
     public void getGuestsFromDB() {
         Guest guest;
         ResultSet rs = this.dbManager.queryDB("SELECT * FROM GUESTS");
@@ -56,6 +57,7 @@ public class Guests {
         }
     }
 
+     // Creates GUESTS table in HotelDB if not already created:
     public void initializeGuestsTable() {
         if (!this.dbManager.checkTableExists("GUESTS")) {
             this.dbManager.updateDB("CREATE  TABLE GUESTS  (NAME  VARCHAR(50),   EMAIL   VARCHAR(50),   PHONENO   VARCHAR(12))");

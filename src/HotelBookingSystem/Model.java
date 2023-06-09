@@ -19,21 +19,25 @@ public class Model extends Observable {
         this.bookings = new Bookings(dbManager, guests, rooms);
     }
 
+    //Updates the displayed list within the Room menu:
     public void refreshUIRoomList() {
         setChanged();
         notifyObservers(rooms);
     }
     
+    //Updates the displayed list within the Guest menu:
     public void refreshUIGuestList() {
         setChanged();
         notifyObservers(guests);
     }
     
+    //Updates the displayed list within the Booking menu:
     public void refreshUIBookingList() {
         setChanged();
         notifyObservers(bookings);
     }
     
+    //Checks if an input guest name already exists within Guests, if so, return true:
     public boolean guestNameExists(String string) {
         for(Guest g : guests.getGuestList()) {
             if(g.getFullName().equalsIgnoreCase(string)){
@@ -43,6 +47,7 @@ public class Model extends Observable {
         return false;
     }
     
+    //Checks if an input guest name already exists within Guests, if so, return true:
     public boolean guestEmailExists(String string) {
         for(Guest g : guests.getGuestList()) {
             if(g.getEmail().equalsIgnoreCase(string)){
@@ -52,6 +57,7 @@ public class Model extends Observable {
         return false;
     }
     
+    //Checks if an input guest name already exists within Guests, if so, return true:
     public boolean guestPhoneNoExists(String string) {
         for(Guest g : guests.getGuestList()) {
             if(g.getPhoneNo().equalsIgnoreCase(string)){
@@ -61,6 +67,7 @@ public class Model extends Observable {
         return false;
     }
     
+    // Checks if the input guest is used in a booking, if so then delete the booking:
     public void removeConnectedBooking(Guest guest) {
         for(Booking b : bookings.getBookingList()) {
             if(b.getGuest().equals(guest)) {
@@ -72,6 +79,7 @@ public class Model extends Observable {
         return;
     }
     
+    // Checks if the input room is used in a booking, if so then delete the booking:
     public void removeConnectedBooking(Room room) {
         for(Booking b : bookings.getBookingList()) {
             if(b.getRoom().equals(room)) {

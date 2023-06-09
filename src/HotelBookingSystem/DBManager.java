@@ -19,6 +19,7 @@ public class DBManager {
 
     Connection conn;
 
+    // DataBase manager:
     public DBManager() {
         establishConnection();
 
@@ -71,7 +72,6 @@ public class DBManager {
 
         Connection connection = this.conn;
         Statement statement = null;
-        ResultSet resultSet = null;
 
         try {
             statement = connection.createStatement();

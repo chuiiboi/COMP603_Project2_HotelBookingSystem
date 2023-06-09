@@ -17,7 +17,7 @@ public class RoomDeluxe extends Room {
         this.capacity = 4;
         this.costPerNight = 278.99;
     }
-      
+
     @Override
     public String getTypeName() {
         return typeName;
