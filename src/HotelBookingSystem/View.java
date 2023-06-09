@@ -435,7 +435,7 @@ public class View extends javax.swing.JFrame implements Observer{
     public Integer getUserInputInt(String question, String defInput) {
         String strInput;
         Integer result;
-        strInput = JOptionPane.showInputDialog(null, "Enter Room Number:", "0"); 
+        strInput = JOptionPane.showInputDialog(null, question, defInput); 
         if(strInput == null) {
             return null; // Return null if 'cancel' is clicked.
         }
