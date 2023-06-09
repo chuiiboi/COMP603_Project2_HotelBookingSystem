@@ -1,13 +1,10 @@
 package HotelBookingSystem;
 
-import java.io.Serializable;
-
 /**
  *
  * @author 21145050
  */
-public class Guest implements Serializable {
-    //default serialVersion i
+public class Guest {
 
     private final String fullName;
     private final String email;
