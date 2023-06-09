@@ -40,14 +40,9 @@ public class Bookings {
 
     // Removes a specified Booking object from the ArrayList:
     public void remove(Booking booking) {
-        if (!bookingList.contains(booking)) {
-            System.out.println("Booking does not exist.");
-        } else {
-            bookingList.remove(booking);
-            rooms.updateAvailability(booking.getRoom(), true);
-            dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
-            System.out.println("Booking has been removed.");
-        }
+        bookingList.remove(booking);
+        rooms.updateAvailability(booking.getRoom(), true);
+        dbManager.updateDB("DELETE FROM BOOKINGS WHERE ROOMNUM=" + booking.getRoom().getRoomNum());
     }
 
     public void getBookingsFromDB() {

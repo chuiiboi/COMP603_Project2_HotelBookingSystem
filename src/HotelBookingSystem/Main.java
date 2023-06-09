@@ -11,6 +11,7 @@ public class Main {
         Model myModel = new Model();
         Controller myController = new Controller(myView, myModel);
         myModel.addObserver(myView);
+       
     }
             
 }
