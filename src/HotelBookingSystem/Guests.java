@@ -1,11 +1,8 @@
 package HotelBookingSystem;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 
 /**
@@ -48,54 +45,6 @@ public class Guests {
             guestList.remove(guest);
             dbManager.updateDB("DELETE FROM GUESTS WHERE NAME='" + guest.getFullName() + "'");
             System.out.println("Guest " + guest.getFullName() + " has been removed.");
-        }
-    }
-
-    // Allow user to select a Guest object from the ArrayList then return the selected Guest object:
-    // uses displayGuests() to show the user options to choose from.
-    public Guest selectGuest() {
-
-        if (guestList.isEmpty()) {
-            System.out.println("There are no guests to choose from");
-        } else {
-            Scanner scan = new Scanner(System.in);
-            int selection;
-
-            System.out.println("Please Select a Guest (0 to cancel)");
-            this.displayGuests();
-            do {
-                try {
-                    selection = scan.nextInt();
-
-                    if (selection < 0 || selection > guestList.size()) {
-                        System.out.println("Guest not found. Please enter a number from the list.");
-                    } else if (selection == 0) {
-                        return null;
-                    } else {
-                        break;
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number from the list.");
-                    selection = 0;
-                }
-            } while (selection < 1 || selection > guestList.size());
-
-            return guestList.get(selection - 1);
-        }
-
-        return null;
-    }
-
-    // Display a numbered list of all of the Guest objects inside the ArrayList:
-    public void displayGuests() {
-        System.out.println("Guests:");
-        if (guestList.isEmpty()) {
-            System.out.println("  There are no guests.");
-        }
-        int i = 1;
-        for (Guest g : guestList) {
-            System.out.println("  " + i + ". " + g.toString());
-            i++;
         }
     }
 

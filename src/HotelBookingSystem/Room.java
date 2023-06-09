@@ -1,12 +1,10 @@
 package HotelBookingSystem;
 
-import java.io.Serializable;
-
 /**
  *
  * @author 21145050
  */
-public abstract class Room implements Serializable {
+public abstract class Room {
 
     private final Integer roomNum; // used as map key for hashMap in Rooms class
     private boolean available;
