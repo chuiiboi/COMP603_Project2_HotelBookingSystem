@@ -214,7 +214,7 @@ public class Controller implements ActionListener {
                     }
 
                     if (!room.isAvailable()) { // Check if room is available.
-                        JOptionPane.showMessageDialog(view.BookingMenuPanel, "Room is not available.");
+                        JOptionPane.showMessageDialog(view.BookingMenuPanel, "That room is not available as it has already been booked.");
                         validRoom = false;
                     } else {
                         validRoom = true;
