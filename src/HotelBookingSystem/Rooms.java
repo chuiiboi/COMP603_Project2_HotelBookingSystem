@@ -124,5 +124,20 @@ public class Rooms {
             this.dbManager.updateDB("CREATE  TABLE ROOMS  (ROOMNUM  INTEGER, AVAILABLE CHAR(6), TYPE   VARCHAR(30))");
         }
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (roomMap.isEmpty()) {
+            sb.append("There are no rooms.");
+        }
+        else {
+            for (Room r : roomMap.values()) {
+                sb.append(r).append("\n");
+            }
+        }
+        
+        return sb.toString();
+    }
 
 }

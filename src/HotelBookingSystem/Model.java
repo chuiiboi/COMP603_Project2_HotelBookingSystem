@@ -19,22 +19,66 @@ public class Model extends Observable {
         this.bookings = new Bookings(dbManager, guests, rooms);
     }
 
-//    public void enterGuestMenu() {
-//        setChanged();
-//        notifyObservers("enterGuestMenu");
-//    }
-//    public void enterRoomMenu() {
-//        setChanged();
-//        notifyObservers("enterRoomMenu");
-//    }
-//    public void enterBookingtMenu() {
-//        setChanged();
-//        notifyObservers("enterBookingtMenu");
-//    }
-//    public void returnToMainMenu() {
-//        setChanged();
-//        notifyObservers("returnToMainMenu");
-//    }
+    public void refreshUIRoomList() {
+        setChanged();
+        notifyObservers(rooms);
+    }
     
-
+    public void refreshUIGuestList() {
+        setChanged();
+        notifyObservers(guests);
+    }
+    
+    public void refreshUIBookingList() {
+        setChanged();
+        notifyObservers(bookings);
+    }
+    
+    public boolean guestNameExists(String string) {
+        for(Guest g : guests.getGuestList()) {
+            if(g.getFullName().equalsIgnoreCase(string)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean guestEmailExists(String string) {
+        for(Guest g : guests.getGuestList()) {
+            if(g.getEmail().equalsIgnoreCase(string)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean guestPhoneNoExists(String string) {
+        for(Guest g : guests.getGuestList()) {
+            if(g.getPhoneNo().equalsIgnoreCase(string)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void removeConnectedBooking(Guest guest) {
+        for(Booking b : bookings.getBookingList()) {
+            if(b.getGuest().equals(guest)) {
+                bookings.remove(b);
+                removeConnectedBooking(guest); // one guest can have multiple bookings, so check bookingList again for any other instances of guest.
+                return;
+            }
+        }
+        return;
+    }
+    
+    public void removeConnectedBooking(Room room) {
+        for(Booking b : bookings.getBookingList()) {
+            if(b.getRoom().equals(room)) {
+                bookings.remove(b);
+                return;
+            }
+        }
+        return;
+    }
 }

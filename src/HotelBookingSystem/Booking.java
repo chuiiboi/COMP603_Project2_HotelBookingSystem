@@ -8,8 +8,8 @@ import java.io.Serializable;
  */
 public class Booking implements Serializable {
 
-    private final Guest guest;
-    private final Room room;
+    public Guest guest;
+    public Room room;
     private final int days;
 
     // Class for an individual Booking object:
@@ -42,6 +42,6 @@ public class Booking implements Serializable {
     // Booking toString:
     @Override
     public String toString() {
-        return "Room#" + this.getRoom().getRoomNum() + " for " + this.getGuest().getFullName() + ", " + this.getDays() + " days: | $" + this.calculateTotalPrice();
+        return "Room " + this.getRoom().getRoomNum() + " for " + this.getGuest().getFullName() + ", " + this.getDays() + " days: | $" + this.calculateTotalPrice();
     }
 }

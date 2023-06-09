@@ -118,4 +118,19 @@ public class Guests {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (guestList.isEmpty()) {
+            sb.append("There are no guests.");
+        }
+        else {
+            for (Guest g : guestList) {
+                sb.append(g).append("\n");
+            }
+        }
+        
+        return sb.toString();
+    }
+    
 }

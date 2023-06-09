@@ -7,7 +7,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -142,11 +142,14 @@
         <Component class="javax.swing.JButton" name="AddRoomButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="actionCommand" type="java.lang.String" value="AddR"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="RemoveRoomButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove"/>
+            <Property name="actionCommand" type="java.lang.String" value="RemoveR"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -253,11 +256,13 @@
         <Component class="javax.swing.JButton" name="AddBookingButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add"/>
+            <Property name="actionCommand" type="java.lang.String" value="AddB"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="RemoveBookingButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove"/>
+            <Property name="actionCommand" type="java.lang.String" value="RemoveB"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -480,11 +485,13 @@
         <Component class="javax.swing.JButton" name="AddGuestButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add"/>
+            <Property name="actionCommand" type="java.lang.String" value="AddG"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="RemoveGuestButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove"/>
+            <Property name="actionCommand" type="java.lang.String" value="RemoveG"/>
           </Properties>
         </Component>
       </SubComponents>

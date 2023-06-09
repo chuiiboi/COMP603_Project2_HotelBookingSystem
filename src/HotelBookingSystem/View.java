@@ -88,8 +88,11 @@ public class View extends javax.swing.JFrame implements Observer{
         RoomsLabel.setText("Rooms:");
 
         AddRoomButton.setText("Add");
+        AddRoomButton.setToolTipText("");
+        AddRoomButton.setActionCommand("AddR");
 
         RemoveRoomButton.setText("Remove");
+        RemoveRoomButton.setActionCommand("RemoveR");
 
         javax.swing.GroupLayout RoomMenuPanelLayout = new javax.swing.GroupLayout(RoomMenuPanel);
         RoomMenuPanel.setLayout(RoomMenuPanelLayout);
@@ -149,8 +152,10 @@ public class View extends javax.swing.JFrame implements Observer{
         BookingsLabel.setText("Bookings:");
 
         AddBookingButton.setText("Add");
+        AddBookingButton.setActionCommand("AddB");
 
         RemoveBookingButton.setText("Remove");
+        RemoveBookingButton.setActionCommand("RemoveB");
 
         javax.swing.GroupLayout BookingMenuPanelLayout = new javax.swing.GroupLayout(BookingMenuPanel);
         BookingMenuPanel.setLayout(BookingMenuPanelLayout);
@@ -271,8 +276,10 @@ public class View extends javax.swing.JFrame implements Observer{
         GuestsLabel.setText("Guests:");
 
         AddGuestButton.setText("Add");
+        AddGuestButton.setActionCommand("AddG");
 
         RemoveGuestButton.setText("Remove");
+        RemoveGuestButton.setActionCommand("RemoveG");
 
         javax.swing.GroupLayout GuestMenuPanelLayout = new javax.swing.GroupLayout(GuestMenuPanel);
         GuestMenuPanel.setLayout(GuestMenuPanelLayout);
@@ -333,6 +340,7 @@ public class View extends javax.swing.JFrame implements Observer{
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     public void addActionListener(ActionListener listener) {
@@ -388,12 +396,17 @@ public class View extends javax.swing.JFrame implements Observer{
 
     @Override
     public void update(Observable obs, Object obj) {
-//        String methodUsed = (String) obj;
-//        switch (methodUsed) {
-//            case "returnToMainMenu":
-//                MainMenuPanel.setVisible(false);
-//                GuestMenuPanel.setVisible(true);
-//                break;
-//        }
+        if(obj.getClass() == Guests.class) {
+            Guests guests = (Guests) obj;
+            this.GuestTextArea.setText(guests.toString());
+        }
+        else if(obj.getClass() == Rooms.class) {
+            Rooms rooms = (Rooms) obj;
+            this.RoomTextArea.setText(rooms.toString());
+        }
+        else if(obj.getClass() == Bookings.class) {
+            Bookings bookings = (Bookings) obj;
+            this.BookingTextArea.setText(bookings.toString());
+        }
     }
 }
