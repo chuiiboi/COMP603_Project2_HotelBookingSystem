@@ -75,19 +75,19 @@ public class Controller implements ActionListener {
         //Get Guest name from user
         String name = getGuestNameFromUser();
         if (name == null) {
-            return; // Break case if dialog was cancelled.
+            return; // Return if dialog was cancelled.
         }
 
         //Get Guest email from user
         String email = getGuestEmailFromUser();
         if (email == null) {
-            return; // Break case if dialog was cancelled.
+            return; // Return if dialog was cancelled.
         }
 
         //Get Guest phone number from user
         String phoneNo = getGuestPhoneNoFromUser();
         if (phoneNo == null) {
-            return; // Break case if dialog was cancelled.
+            return; // Return if dialog was cancelled.
         }
 
         //Enter details into a new Guest:
@@ -100,16 +100,16 @@ public class Controller implements ActionListener {
         //Get Room number from user:
         Integer roomNum = getRoomNum();
         if (roomNum == null) {
-            return; // Break case if dialog was cancelled or room number already exists
+            return; // Return if dialog was cancelled=
         }
 
         //Get Room type from user:
         String roomType = getRoomTypeFromUser();
         if (roomType == null) {
-            return;// Break case if dialog was cancelled
+            return;// Return if dialog was cancelled
         }
 
-        //Enter details into a new Room
+        //Enter details into a new Room:
         if (roomType.equalsIgnoreCase("standard")) {
             this.model.rooms.add(new RoomStandard(roomNum));
         } else {
@@ -129,22 +129,22 @@ public class Controller implements ActionListener {
         //Get Room from user:
         Room room = getRoomFromUserAndCheckAvailablility();
         if (room == null) {
-            return; // Break case if dialog was cancelled
+            return; // Return if dialog was cancelled
         }
 
         //Get Guest from user:
         Guest guest = getGuestFromUser("Select Guest:");
         if (guest == null) {
-            return; // Break case if dialog was cancelled
+            return; // Return if dialog was cancelled
         }
 
         //Get Room from user:
         Integer numDays = getNumDaysFromUser();
         if (numDays == null) {
-            return; // Break case if dialog was cancelled
+            return; // Return if dialog was cancelled
         }
 
-        //Enter details into a new Booking
+        //Enter details into a new Booking:
         this.model.bookings.add(new Booking(guest, room, numDays));
         this.model.rooms.updateAvailability(room, false);
         this.model.refreshUIBookingList();
@@ -155,17 +155,17 @@ public class Controller implements ActionListener {
         //Check if there are any guests to remove:
         if (this.model.guests.getGuestList().isEmpty()) {
             this.view.showMessagePopUp("There are no Guests to remove.");
-            return; // Break case if there are no guests.
+            return; // Return if there are no guests.
         }
 
         //Get Guest from user:
         Guest guest = getGuestFromUser("Select Guest to remove:");
 
         if (guest == null) {
-            return; // Break case if dialog was cancelled
+            return; // Return if dialog was cancelled
         }
 
-        //Remove selected Guest (and any bookings its connected to)
+        //Remove selected Guest (and any bookings its connected to):
         this.model.guests.remove(guest);
         this.model.removeConnectedBooking(guest);
         this.view.showMessagePopUp("Guest '" + guest.getFullName() + "' Removed.");
@@ -182,10 +182,10 @@ public class Controller implements ActionListener {
         //Get Room from user:
         Room room = getRoomFromUser("Select Room to remove:");
         if (room == null) {
-            return; // Break case if dialog was cancelled
+            return; // Return if dialog was cancelled
         }
 
-        //Remove selected Room (and any bookings its connected to)
+        //Remove selected Room (and any bookings its connected to):
         this.model.rooms.remove(room);
         this.model.removeConnectedBooking(room);
         this.view.showMessagePopUp("Room '#" + room.getRoomNum() + "' Removed.");
@@ -196,16 +196,16 @@ public class Controller implements ActionListener {
         //Check if there are any guests or rooms to add:
         if (this.model.bookings.getBookingList().isEmpty()) {
             this.view.showMessagePopUp("There are no Bookings to remove");
-            return; // Break case if there are no bookings.
+            return; // Return if there are no bookings.
         }
 
         //Get Booking from user:
         Booking booking = getBookingFromUser("Select booking to remove");
         if (booking == null) {
-            return; // Break case if dialog was cancelled
+            return; // Return if dialog was cancelled
         }
 
-        //Remove selected Booking
+        //Remove selected Booking:
         this.model.bookings.remove(booking);
         this.view.showMessagePopUp("Booking Removed.");
         this.model.refreshUIBookingList();
@@ -217,7 +217,7 @@ public class Controller implements ActionListener {
             guestName = this.view.getUserInputString("Enter Guest full name:", "Full Name");
 
             if (guestName == null) {
-                return null; // Break loop if dialog was cancelled.
+                return null; // Return if dialog was cancelled.
             }
 
             if (guestName.isEmpty()) {
@@ -227,7 +227,7 @@ public class Controller implements ActionListener {
             } else if (this.model.guestNameExists(guestName)) {
                 this.view.showMessagePopUp("Invalid Input: Guest name already exists. Try again.");
             } else {
-                break;
+                break; // Break loop
             }
         }
         return guestName;
@@ -239,17 +239,17 @@ public class Controller implements ActionListener {
             guestEmail = this.view.getUserInputString("Enter Guest Email:", "example@email.com");
 
             if (guestEmail == null) {
-                return null; // Return if cancel is clicked.
+                return null; // Return if dialog was cancelled.
             }
 
             if (guestEmail.isEmpty()) {
                 this.view.showMessagePopUp("Invalid Input: Cannot be empty. Try again");
-            } else if (!guestEmail.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) { //Check if isnt valid email format
+            } else if (!guestEmail.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) { //Check if input isnt valid email format.
                 this.view.showMessagePopUp("Invalid Email Format Try again.");
             } else if (this.model.guestEmailExists(guestEmail)) {
                 this.view.showMessagePopUp("Invalid Input: Guest email already exists. Try again.");
             } else {
-                break;
+                break; // Break loop
             }
         }
         return guestEmail;
@@ -261,17 +261,17 @@ public class Controller implements ActionListener {
             guestPhoneNo = this.view.getUserInputString("Enter Guest PhoneNo:", "00000000");
 
             if (guestPhoneNo == null) {
-                return null; // Break loop if dialog was cancelled.
+                return null; // Return if dialog was cancelled.
             }
 
             if (guestPhoneNo.isEmpty()) {
                 this.view.showMessagePopUp("Invalid Input: Cannot be empty. Try again");
-            } else if (!guestPhoneNo.matches("^[0-9]{7,12}$")) { //Check if isnt valid phone number format
+            } else if (!guestPhoneNo.matches("^[0-9]{7,12}$")) { //Check if input isnt valid phone number format.
                 this.view.showMessagePopUp("Invalid Phone Number Format Try again.");
             } else if (this.model.guestPhoneNoExists(guestPhoneNo)) {
                 this.view.showMessagePopUp("Invalid Input: Guest phone number already exists. Try again.");
             } else {
-                break;
+                break; // Break loop
             }
         }
         return guestPhoneNo;
@@ -282,7 +282,7 @@ public class Controller implements ActionListener {
         while (true) {
             roomNum = view.getUserInputInt("Enter Room Number:", "0");
             if (roomNum == null) {
-                return null; // Break loop if dialog was cancelled.
+                return null; // Return if dialog was cancelled.
             }
 
             // Check input is at least 0:
@@ -308,13 +308,13 @@ public class Controller implements ActionListener {
         while (true) {
             room = (Room) this.view.getUserSelection("Select Room:", "Room Selection", this.model.rooms.getRoomMap().values().toArray(), "");
             if (room == null) {
-                return null; // Break loop if dialog was cancelled
+                return null; // Return null if dialog was cancelled
             }
 
             if (!room.isAvailable()) { // Check if room is available.
                 this.view.showMessagePopUp("That room is not available as it has already been booked.");
             } else {
-                break;
+                break; // Break loop
             }
         }
         return room;
@@ -343,12 +343,12 @@ public class Controller implements ActionListener {
         while (true) {
             numDays = this.view.getUserInputInt("Enter Duration of visit (days):", "0");
             if (numDays == null) {
-                break; // Break loop if dialog was cancelled.
+                return null; // Return null if dialog was cancelled.
             }
             if (numDays <= 0) {
                 this.view.showMessagePopUp("Invaled Input: Must be more than 0. Try again.");
             } else {
-                break;
+                break; // Break loop
             }
         }
         return numDays;
